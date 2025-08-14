@@ -1,3 +1,19 @@
+# --- bootstrap para garantir libs no Streamlit Cloud ---
+import sys, subprocess
+
+def _pip(pkg):
+    try:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", pkg])
+    except Exception as e:
+        print("Falha instalando", pkg, e)
+
+# Garante plotly (às vezes o Cloud ignora o requirements)
+try:
+    import plotly.express as px  # noqa
+except ModuleNotFoundError:
+    _pip("plotly==5.23.0")
+    import plotly.express as px  # noqa
+# -------------------------------------------------------
 import streamlit as st
 import sqlite3
 import pandas as pd
